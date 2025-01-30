@@ -12,9 +12,13 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const corsOptions = {
+    origin: 'http://localhost:5173', // Change this to your actual frontend domain
+  };
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-app.use(cors())
 
 app.get("/", (req, res) =>{
     res.json({message: "Hello world!"})
