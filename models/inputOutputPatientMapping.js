@@ -22,7 +22,13 @@ export const getLogs = async (patientId, page, pageSize) => {
             guideline_link: true,
             preferred_drug: true,
             payer_pathway: true,
-            overall_survival: true
+            overall_survival: true,
+            disease: true,
+            sub_disease: true,
+            bio_markers: true,
+            como: true,
+            perf_stat: true,
+            pathd: true
         }}},
         skip: skip,
         take: pageSize,
