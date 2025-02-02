@@ -1,6 +1,7 @@
 import prisma from "../DB/db.config.js";
 
-export const getLogs = async (patientId) => {
+export const getLogs = async (patientId, page, pageSize) => {
+    const skip = (page - 1) * pageSize;
     return await prisma.inputOutputPatientMappings.findMany({
         where: {
             patient_id: patientId
@@ -23,6 +24,8 @@ export const getLogs = async (patientId) => {
             payer_pathway: true,
             overall_survival: true
         }}},
+        skip: skip,
+        take: pageSize,
         orderBy: {
             id: 'desc',
         },

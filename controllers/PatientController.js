@@ -35,10 +35,10 @@ export default class PatientController {
     static async showAll(req, res) {
         try{
             const user = req.user;
-            console.log('USER', user);
+            const { page = 1, pageSize = 10 } = req.query;
             const patient = await checkPatientByUserId(user);
             if(!patient) return res.status(404).json({message: "Patients not found"});
-            const logs = await getLogs(patient.id);
+            const logs = await getLogs(patient.id, Number(page), Number(pageSize));
             return res.status(200).json({message: "Logs found", logs});
         }
         catch(error){

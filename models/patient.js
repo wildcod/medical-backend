@@ -20,7 +20,6 @@ export const checkUserPatient = async (user, payload) => {
 }
 
 export const checkPatientByUserId = async (user) => {
-    console.log("payload", payload)
     return await prisma.patients.findMany({
         where: {
             user_id: Number(user.id)
