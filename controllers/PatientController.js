@@ -82,18 +82,18 @@ export default class PatientController {
                     data: {age: patient_payload.age}
                 })
             }
-            const inputDetail = await getInputDetails(input_details_payload);
-            if(!inputDetail) {
-                res.status(404).json({message: "Not match with input details."});
-            }
-            console.log("input details from db: ", inputDetail)
+            // const inputDetail = await getInputDetails(input_details_payload);
+            // if(!inputDetail) {
+            //     res.status(404).json({message: "Not match with input details."});
+            // }
+            // console.log("input details from db: ", inputDetail)
             //const outputDetail = await getOutputDetails(inputDetail);
-            const inputOutputPatientMappings_payload = createInputOutputDetailMappingPayload(patient, inputDetail);
-            console.log("inputOutputPatientMappings_payload: ", inputOutputPatientMappings_payload);
-            await prisma.inputOutputPatientMappings.create({data:inputOutputPatientMappings_payload});
-            delete inputDetail.created_at;
-            delete inputDetail.updated_at;
-            return res.status(200).json({message: "patient created successfully", patient, inputDetail, output: 'test-demo'});
+            // const inputOutputPatientMappings_payload = createInputOutputDetailMappingPayload(patient, inputDetail);
+            // console.log("inputOutputPatientMappings_payload: ", inputOutputPatientMappings_payload);
+            // await prisma.inputOutputPatientMappings.create({data:inputOutputPatientMappings_payload});
+            // delete inputDetail.created_at;
+            // delete inputDetail.updated_at;
+            return res.status(200).json({message: "patient created successfully", output: 'test-demo'});
         }
         catch(error){
             console.log(error);
