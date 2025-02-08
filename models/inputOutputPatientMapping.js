@@ -1,10 +1,11 @@
 import prisma from "../DB/db.config.js";
 
-export const getLogs = async (patientId, page, pageSize) => {
+export const getLogs = async (patients, { page, pageSize }) => {
     const skip = (page - 1) * pageSize;
+    const patientIds = patients.map((pat) => pat.id);
     const logs = await prisma.inputOutputPatientMappings.findMany({
         where: {
-            patient_id: patientId
+            patient_id: { in: patientIds }
         },
         select: {patient: {select: {
             age: true,
@@ -14,7 +15,7 @@ export const getLogs = async (patientId, page, pageSize) => {
             race: true,
             first_name: true,
             last_name: true,
-        }}, input_detail: {
+        }}, input_output_detail: {
             select: {
             ae: true,
             ae_management: true,
@@ -33,13 +34,13 @@ export const getLogs = async (patientId, page, pageSize) => {
         skip: skip,
         take: pageSize,
         orderBy: {
-            id: 'desc',
+            id: 'asc',
         },
     });
 
     const totalPatients = await prisma.inputOutputPatientMappings.count({
         where: {
-            patient_id: patientId
+            patient_id: { in: patientIds }
         },
     });
 

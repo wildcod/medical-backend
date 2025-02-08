@@ -53,6 +53,10 @@ enum Race {
   WHITE
   ASIAN
   HISPANIC
+  AMERICAN_INDIAN_OR_ALASKA_NATIVE
+  BLACK_OR_AFRICAN_AMERICAN
+  HISPANIC_OR_LATINO
+  NATIVE_HAWAIIAN_OR_OTHER_PACIFIC_ISLANDER
 }
 
 model Patients {
@@ -71,11 +75,8 @@ model Patients {
   updated_at DateTime @default(now())
 }
 
-model InputDetails {
+model InputOutputDetails {
   id Int @id @default(autoincrement())
-  age Int
-  gender Gender @default(MALE)
-  race Race @default(WHITE)
   pathd PathD @default(T)
   como COMO @default(NONE)
   disease String @db.VarChar(191)
@@ -97,9 +98,9 @@ model InputDetails {
 model InputOutputPatientMappings {
   id Int @id @default(autoincrement())
   patient_id Int
-  input_detail_id Int
+  input_output_detail_id Int
   patient Patients @relation(fields: [patient_id], references: [id])
-  input_detail InputDetails @relation(fields: [input_detail_id], references: [id])
+  input_output_detail InputOutputDetails @relation(fields: [input_output_detail_id], references: [id])
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
 }

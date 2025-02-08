@@ -5,12 +5,12 @@ export const createPatientPayload = (payload) => {
         age: payload.age, 
         race: payload.race, 
         email: payload.email, 
-        phone: JSON.stringify(payload.phone), 
+        phone: `${payload.phone}`, 
         gender: payload.gender, 
     }
 }
 
-export const createInputDetailsPayload = (payload) => {
+export const createInputOutputDetailsPayload = (payload) => {
     return {
         disease: payload.disease, 
         sub_disease: payload.sub_disease,
@@ -18,11 +18,15 @@ export const createInputDetailsPayload = (payload) => {
         como: payload.como, 
         pathd: payload.pathd, 
         perf_stat: payload.perf_stat,
-        age: payload.age,
-        gender: payload.gender,
-        race: payload.race
+        preferred_drug: 'crizotinib',
+        alternate_drug: 'lazertinib',
+        guideline_link: 'http://guideline.com',
+        payer_pathway: 'test-payey',
+        overall_survival: 'test-survival',
+        ae: 'test-ae',
+        ae_management: 'test-ae-management'
     }
-} 
+}
 
 export const createInputOutputDetailMappingPayload = (patient, inputDetail) => {
   return {
@@ -31,7 +35,7 @@ export const createInputOutputDetailMappingPayload = (patient, inputDetail) => {
                 id: patient.id,
             }
         },
-        input_detail: {
+        input_output_detail: {
             connect: {
                 id: inputDetail.id,
             }

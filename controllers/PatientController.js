@@ -2,8 +2,8 @@ import vine, {errors} from "@vinejs/vine";
 import { patientSchema } from "../validations/PatientValidation.js";
 import { patientSearchSchema } from "../validations/PatientSearchValidation.js";
 import prisma from "../DB/db.config.js";
-import { createInputDetailsPayload, createInputOutputDetailMappingPayload, createPatientPayload } from "../utils/helper.js";
-import { getInputDetails } from "../models/inputDetail.js";
+import { createInputOutputDetailsPayload, createInputOutputDetailMappingPayload, createPatientPayload } from "../utils/helper.js";
+import { getInputDetails, getInputDetailsPayload, getOutput } from "../models/inputDetail.js";
 import { checkPatientByUserId, checkUserPatient } from "../models/patient.js";
 import { getLogs } from "../models/inputOutputPatientMapping.js";
 
@@ -35,10 +35,11 @@ export default class PatientController {
     static async showAll(req, res) {
         try{
             const user = req.user;
-            const { page = 1, pageSize = 10 } = req.query;
-            const patient = await checkPatientByUserId(user);
-            if(!patient) return res.status(404).json({message: "Patients not found"});
-            const response = await getLogs(patient.id, Number(page), Number(pageSize));
+            const { page = 1, pageSize = 10, ...restQuery } = req.query;
+            const patients = await checkPatientByUserId(user, restQuery);
+            console.log('Patient', patients);
+            if(!patients || !patients.length) return res.status(404).json({message: "Patients not found"});
+            const response = await getLogs(patients, {page, pageSize});
             return res.status(200).json({message: "Logs found", data: response});
         }
         catch(error){
@@ -60,7 +61,7 @@ export default class PatientController {
             const payload = await validator.validate(body);
             
             const patient_payload = createPatientPayload(payload);
-            const input_details_payload = createInputDetailsPayload(payload);
+            const input_details_payload = createInputOutputDetailsPayload(payload);
             patient_payload.user_id = user.id;
             console.log("patient payload : ", patient_payload);
             console.log("input details payload : ", input_details_payload);
@@ -83,17 +84,18 @@ export default class PatientController {
                 })
             }
             // const inputDetail = await getInputDetails(input_details_payload);
+            // const inputDetailPayload = getInputDetailsPayload(input_details_payload)
+            const inputOutputDetails = await prisma.inputOutputDetails.create({ data: input_details_payload })
             // if(!inputDetail) {
             //     res.status(404).json({message: "Not match with input details."});
             // }
-            // console.log("input details from db: ", inputDetail)
-            //const outputDetail = await getOutputDetails(inputDetail);
-            // const inputOutputPatientMappings_payload = createInputOutputDetailMappingPayload(patient, inputDetail);
-            // console.log("inputOutputPatientMappings_payload: ", inputOutputPatientMappings_payload);
-            // await prisma.inputOutputPatientMappings.create({data:inputOutputPatientMappings_payload});
-            // delete inputDetail.created_at;
-            // delete inputDetail.updated_at;
-            return res.status(200).json({message: "patient created successfully", output: 'test-demo'});
+            console.log("input details from db: ", inputOutputDetails);
+            // const outputDetail = await getOutputDetails(inputDetail);
+            const inputOutputPatientMappings_payload = createInputOutputDetailMappingPayload(patient, inputOutputDetails);
+            console.log("inputOutputPatientMappings_payload: ", inputOutputPatientMappings_payload);
+            await prisma.inputOutputPatientMappings.create({data:inputOutputPatientMappings_payload});
+            const output = getOutput(inputOutputDetails);
+            return res.status(200).json({message: "patient created successfully", output});
         }
         catch(error){
             console.log(error);

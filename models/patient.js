@@ -19,10 +19,16 @@ export const checkUserPatient = async (user, payload) => {
     }
 }
 
-export const checkPatientByUserId = async (user) => {
+export const checkPatientByUserId = async (user, query) => {
+    const isFilterByEmailOrPhone = Boolean(query && (query.email && query.phone))
+
     return await prisma.patients.findMany({
-        where: {
-            user_id: Number(user.id)
-        },
+        where: { 
+            user_id:  Number(user.id),
+            ...(isFilterByEmailOrPhone ? {
+                email: query.email,
+                phone: query.phone
+            } : {})
+        }
     });
 }
