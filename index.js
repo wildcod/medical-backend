@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const corsOptions = {
-    origin: ['http://localhost:5173', 'https://dynamic-cassata-78387a.netlify.app'],
+    origin: "*",
   };
 
 app.use(cors(corsOptions));
