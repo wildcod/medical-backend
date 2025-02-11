@@ -42,3 +42,21 @@ export const createInputOutputDetailMappingPayload = (patient, inputDetail) => {
         }
     }
 } 
+
+export const validateInputAndGetQuery = (search) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const phoneRegex = /^(?:\(\d{3}\)\s?|\d{3}[-\s]?)?\d{3}[-\s]?\d{4}$/;
+    let isValid = false;
+    let query = {}
+  
+    if (emailRegex.test(search)) {
+        isValid = true;
+        query = { email: search }
+    } else if (phoneRegex.test(search)) {
+        isValid = true;
+        query = { phone: search }
+    }
+
+    return { isValid, query };
+  }
+  

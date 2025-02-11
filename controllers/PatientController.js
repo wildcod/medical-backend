@@ -2,7 +2,7 @@ import vine, {errors} from "@vinejs/vine";
 import { patientSchema } from "../validations/PatientValidation.js";
 import { patientSearchSchema } from "../validations/PatientSearchValidation.js";
 import prisma from "../DB/db.config.js";
-import { createInputOutputDetailsPayload, createInputOutputDetailMappingPayload, createPatientPayload } from "../utils/helper.js";
+import { createInputOutputDetailsPayload, createInputOutputDetailMappingPayload, createPatientPayload, validateInputAndGetQuery } from "../utils/helper.js";
 import { getInputDetails, getInputDetailsPayload, getOutput } from "../models/inputDetail.js";
 import { checkPatientByUserId, checkUserPatient } from "../models/patient.js";
 import { getLogs } from "../models/inputOutputPatientMapping.js";
@@ -35,10 +35,17 @@ export default class PatientController {
     static async showAll(req, res) {
         try{
             const user = req.user;
-            const { page = 1, pageSize = 10, ...restQuery } = req.query;
-            const patients = await checkPatientByUserId(user, restQuery);
-            console.log('Patient', patients);
-            if(!patients || !patients.length) return res.status(404).json({message: "Patients not found"});
+            const { page = 1, pageSize = 10, search } = req.query;
+
+            const { isValid, query } = validateInputAndGetQuery(search)
+
+            if(!isValid){
+                return res.status(400).json({error: 'Invalid search query, Please try again.'});
+            }
+
+
+            const patients = await checkPatientByUserId(user, query);
+            if(!patients || !patients.length) return res.status(404).json({message: "Patient not found"});
             const response = await getLogs(patients, {page, pageSize});
             return res.status(200).json({message: "Logs found", data: response});
         }
