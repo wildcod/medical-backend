@@ -8,6 +8,9 @@ CREATE TYPE "COMO" AS ENUM ('DIABETES', 'HYPERTENTION', 'CARDIAC_DISORDER', 'NON
 CREATE TYPE "PerfStat" AS ENUM ('FULLY_ACTIVE', 'MODERATE_ACTIVE', 'INACTIVE');
 
 -- CreateEnum
+CREATE TYPE "Smoker" AS ENUM ('YES', 'NO');
+
+-- CreateEnum
 CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE', 'TS');
 
 -- CreateEnum
@@ -32,7 +35,7 @@ CREATE TABLE "Patients" (
     "user_id" INTEGER NOT NULL,
     "first_name" VARCHAR(191) NOT NULL,
     "last_name" VARCHAR(191) NOT NULL,
-    "age" INTEGER NOT NULL,
+    "dob" TIMESTAMP(3) NOT NULL,
     "gender" VARCHAR(191) NOT NULL,
     "race" VARCHAR(191) NOT NULL,
     "email" VARCHAR(191) NOT NULL,
@@ -48,6 +51,8 @@ CREATE TABLE "InputOutputDetails" (
     "id" SERIAL NOT NULL,
     "pathd" "PathD" NOT NULL DEFAULT 'T',
     "como" "COMO" NOT NULL DEFAULT 'NONE',
+    "insurance" VARCHAR(191) NOT NULL,
+    "smoker" "Smoker" NOT NULL DEFAULT 'NO',
     "disease" VARCHAR(191) NOT NULL,
     "sub_disease" VARCHAR(191) NOT NULL,
     "bio_markers" VARCHAR(191) NOT NULL,

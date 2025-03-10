@@ -2,7 +2,7 @@ export const createPatientPayload = (payload) => {
     return {
         first_name: payload.first_name, 
         last_name: payload.last_name,
-        age: payload.age, 
+        dob: payload.dob + 'T00:00:00Z', 
         race: payload.race, 
         email: payload.email, 
         phone: `${payload.phone}`, 
@@ -12,6 +12,8 @@ export const createPatientPayload = (payload) => {
 
 export const createInputOutputDetailsPayload = (payload) => {
     return {
+        insurance: payload.insurance,
+        smoker: payload.smoker,
         disease: payload.disease, 
         sub_disease: payload.sub_disease,
         bio_markers: payload.bio_markers, 
@@ -43,18 +45,24 @@ export const createInputOutputDetailMappingPayload = (patient, inputDetail) => {
     }
 } 
 
-export const validateInputAndGetQuery = (search) => {
+export const validateInputAndGetQuery = ({email, phone, dob, lastName}) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const phoneRegex = /^(?:\(\d{3}\)\s?|\d{3}[-\s]?)?\d{3}[-\s]?\d{4}$/;
     let isValid = false;
     let query = {}
   
-    if (emailRegex.test(search)) {
+    if (emailRegex.test(email)) {
         isValid = true;
-        query = { email: search }
-    } else if (phoneRegex.test(search)) {
+        query = { ...query, email }
+    } if (phoneRegex.test(phone)) {
         isValid = true;
-        query = { phone: search }
+        query = { ...query, phone }
+    } if (dob) {
+        isValid = true;
+        query = { ...query, dob: dob + 'T00:00:00Z' }
+    } if (lastName) {
+        isValid = true;
+        query = { ...query, last_name: lastName }
     }
 
     return { isValid, query };

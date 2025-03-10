@@ -43,6 +43,11 @@ enum PerfStat {
   INACTIVE
 }
 
+enum Smoker {
+  YES
+  NO
+}
+
 enum Gender {
   MALE
   FEMALE
@@ -65,7 +70,7 @@ model Patients {
   user Users @relation(fields: [user_id], references: [id])
   first_name String @db.VarChar(191)
   last_name String @db.VarChar(191)
-  age Int
+  dob DateTime
   gender String @db.VarChar(191)
   race String @db.VarChar(191)
   email String @unique @db.VarChar(191)
@@ -79,6 +84,8 @@ model InputOutputDetails {
   id Int @id @default(autoincrement())
   pathd PathD @default(T)
   como COMO @default(NONE)
+  insurance String @db.VarChar(191)
+  smoker Smoker @default(NO)
   disease String @db.VarChar(191)
   sub_disease String @db.VarChar(191)
   bio_markers String @db.VarChar(191)

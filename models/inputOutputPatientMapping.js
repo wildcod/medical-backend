@@ -8,7 +8,7 @@ export const getLogs = async (patients, { page, pageSize }) => {
             patient_id: { in: patientIds }
         },
         select: {patient: {select: {
-            age: true,
+            dob: true,
             email: true,
             gender: true,
             phone: true,
@@ -18,6 +18,8 @@ export const getLogs = async (patients, { page, pageSize }) => {
         }}, input_output_detail: {
             select: {
             ae: true,
+            insurance: true,
+            smoker: true,
             ae_management: true,
             alternate_drug: true,
             guideline_link: true,
