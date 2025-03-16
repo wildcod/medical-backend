@@ -13,5 +13,6 @@ router.post("/patient", authMiddleware, PatientController.newPatient);
 router.post("/existing/patient", authMiddleware, PatientController.existingPatient);
 router.get("/patient", authMiddleware, PatientController.show);
 router.get("/patients", authMiddleware, PatientController.showAll);
+router.get("/patients/recent", authMiddleware, PatientController.recentPatients)
 
 export default router;

@@ -151,6 +151,53 @@ export default class PatientController {
         }
     }
 
+    static async recentPatients(req, res){
+        try{
+            const inputOuputMapping = await prisma.inputOutputPatientMappings.findMany({
+                orderBy: {
+                    created_at: 'desc',
+                  },
+                  select: {patient: {select: {
+                    dob: true,
+                    email: true,
+                    gender: true,
+                    phone: true,
+                    race: true,
+                    first_name: true,
+                    last_name: true,
+                }}, input_output_detail: {
+                    select: {
+                    ae: true,
+                    insurance: true,
+                    smoker: true,
+                    ae_management: true,
+                    alternate_drug: true,
+                    guideline_link: true,
+                    preferred_drug: true,
+                    payer_pathway: true,
+                    overall_survival: true,
+                    disease: true,
+                    sub_disease: true,
+                    bio_markers: true,
+                    como: true,
+                    perf_stat: true,
+                    pathd: true
+                }}},  
+                take: 5,
+            });
+
+            if(!inputOuputMapping || !inputOuputMapping.length){
+                return res.status(200).json({data: []});
+            }
+
+            return res.status(200).json({data: inputOuputMapping});
+        }
+        catch(error){
+            console.log(error);
+            res.status(500).json({message: "Something went wrong, Please try again later."});
+        }
+    }
+
     static async update(){
         
     }

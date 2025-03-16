@@ -24,7 +24,6 @@ export const patientSchema = vine.object({
 export const existingPatientSchema = vine.object({
     insurance: vine.string().minLength(2).maxLength(150),
     smoker: vine.enum(['YES', 'NO']),
-    gender: vine.enum(['MALE', 'FEMALE', 'BINARY', 'TS']),
     patientId: vine.number().withoutDecimals(),
     pathd: vine.enum(['T', 'N', 'M']),
     como: vine.enum(['DIABETES', 'HYPERTENTION', 'NONE']),
