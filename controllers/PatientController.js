@@ -121,7 +121,7 @@ export default class PatientController {
             // check paitent exists or not
             const patient = await prisma.patients.findUnique({
                 where: { 
-                    id: payload.patientId
+                    phone: payload.phone
                 }
             });
 
