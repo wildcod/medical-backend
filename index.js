@@ -20,9 +20,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
-app.get("/", (req, res) =>{
-    res.json({message: "Hello world!"})
-})
+app.use('/', express.static(path.join(__dirname, 'dist')))
 
 import ApiRoutes from "./routes/api.js";
 app.use("/api", ApiRoutes);
