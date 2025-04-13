@@ -152,8 +152,14 @@ export default class PatientController {
     }
 
     static async recentPatients(req, res){
+        const user = req.user;
         try{
             const inputOuputMapping = await prisma.inputOutputPatientMappings.findMany({
+                where: {
+                    patient: {
+                      user_id: Number(user.id), // Filter by user ID
+                    },
+                },
                 orderBy: {
                     created_at: 'desc',
                   },

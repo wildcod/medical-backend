@@ -25,6 +25,11 @@ app.use('/', express.static(path.join(__dirname, 'dist')))
 import ApiRoutes from "./routes/api.js";
 app.use("/api", ApiRoutes);
 
+// This will support client-side routing for /form?isForm=1
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
 
 //  const csvFilePath = path.join(__dirname, 'medical_demo.csv');
 
